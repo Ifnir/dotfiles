@@ -1,0 +1,106 @@
+#--------------------BSPWM Control -------------------
+
+# shutdown
+super + alt + s
+	systemctl poweroff
+
+# system reboot
+super + alt + r
+	reboot
+
+# make sxhkd reload its configuration files
+super + Escape
+	pkill -USR1 -x sxhkd
+ 
+# quit or restart bspwm
+super + shift + {q,r}
+	bspc {quit,wm -r}
+ 
+# create a new terminal window or swap the current one to the biggest one in the screen 
+super + {_,shift + }Return
+	{st, bspc node -s biggest.local}
+
+
+# close or kill a window
+super + {_,shift + }c
+	bspc node -{k,c}
+
+# -------------------Desktop-----------------------
+ 
+# change the window state
+super + {t,ctrl + t,l,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# alternative between the tiled and monocle layout
+super + m
+	bspc desktop -l next
+
+# send the newest marked node to the newest pre selected node
+super + y
+	bspc node newest.marked.local -n newest.!automatic.local
+ 
+# expand a window by moving one of its side outward
+super + alt {Left,Down,Up,Right}
+	bspc node -z {left -20 0, bottom 0 20,top 0 -20,right 20 0}
+
+super + alt + shift + {Left,Down,Up,Right}
+	bspc node -z {right -20 0, top 0 20, bottom 0 -20, left 20 0}
+
+super + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# focus or send a window to the given desktop
+super + {_,shift + }{1-8}
+	bspc {desktop -f,node -d} '^{1-8}'
+
+super +{_,shift + }{Left,Down,Up,Right}
+	bspc node -{f,s} {west,south,north,east}
+
+alt + {Left,Right}
+    bspc monitor {west,east} -f
+
+#super + {Left,Right,Up,Down}
+#    dir={west,east,north,south}; bspc node "$dir" -f || bspc monitor "$dir" -f
+
+super + {_,shift + }c
+	bspc node -f {next,prev}.local
+
+#super + {grave,Tab}
+#	bspc {node,desktop} -f last || zsh -c "last-workspace.sh"
+
+super + bracket{left,right}
+	bspc desktop -f {prev,next}.local
+
+super + {o,i}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+
+ctrl + alt + {Left,Right}
+	bspc node -d {prev,next} -f
+
+ctrl + alt + {h,l}
+	bspc node -d {prev,next} -f
+#--------------- application ----------------------
+super + shift + t
+	alacritty
+
+# rofi
+super + space
+    rofi -no-config -no-lazy-grab -show drun -modi drun
+
+#--------------- notification ---------------------
+#super + space
+#	dunctctl close-all
+
+super + shift + Escape
+	dunstctl history-pop
+
+#---------------- Func ---------------------------
+super + u
+	bspc rule -s \* -o state=floating && alacritty -e $SHELL -c "figlet update... && sudo pacman -Syu"
+
+super + alt + c
+	notfy-send "$(xprop | grep 'CLASS')"
+
+
