@@ -43,6 +43,7 @@
     sudo pacman -S brightnessctl 
     sudo pacman -S pavucontrol pamixer
     sudo pacman -S network-manager-applet nm-connection-editor bluez bluez-utils blueman
+    sudo pacman -S sof-firmware
 
     # Installing yay + cloning dotfiles
     mkdir Repos && cd Repos
